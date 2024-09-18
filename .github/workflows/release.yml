@@ -1,0 +1,26 @@
+name: WarbandATM Release
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Create Zip
+      run: |
+        zip -r ${GITHUB_REF_NAME}.zip WarbandATM
+
+    - name: WarbandATM Release
+      run: |
+        curl -X POST \
+        -H "x-api-token: ${{ secrets.CF_API_KEY }}" \
+        -F "file=@${GITHUB_REF_NAME}.zip" \
+        -F "metadata={\"changelog\":\"Automated release from GitHub Actions\",\"changelogType\":\"markdown\",\"displayName\":\"${GITHUB_REF_NAME}\"}" \
+        https://wow.curseforge.com/api/projects/${{ secrets.CF_PROJECT_ID }}/upload-file
