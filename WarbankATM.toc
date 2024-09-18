@@ -2,6 +2,8 @@
 ## Title: Warbank ATM
 ## Notes: Warband Bank Money Manager
 ## Author: APills, Brylic
-## Version: 0.0.1
-## SavedVariables: 
+## Version: 1.0.0
+## SavedVariables: WATMProfiles, WATMCharacterSettings
 ## X-Curse-Project-ID: 1102853
+
+WarbankATM.lua
