@@ -1,9 +1,13 @@
-name: WarbandATM Release
+name: Release AddOn
 
+#on: [push]
 on:
   push:
+    branches:
+      - master
     tags:
-      - '*'
+      - '**'
+
 
 jobs:
   build:
