@@ -1,30 +1,38 @@
-name: Release AddOn
+# description of this workflow, can be anything you want
+name: Package and release
 
-#on: [push]
+# we need to let GitHub know _when_ we want to release, typically only when we create a new tag.
+# this will target only tags, and not all pushes to the master branch.
+# this part can be heavily customized to your liking, like targeting only tags that match a certain word,
+# other branches or even pullrequests.
 on:
   push:
-    branches:
-      - master
     tags:
       - '**'
 
-
+# a workflow is built up as jobs, and within these jobs are steps
 jobs:
-  build:
+
+  # "release" is a job, you can name it anything you want
+  release:
+
+    # we can run our steps on pretty much anything, but the "ubuntu-latest" image is a safe bet
     runs-on: ubuntu-latest
 
+    # specify the environment variables used by the packager, matching the secrets from the project on GitHub
+    env:
+      CF_API_KEY: ${{ secrets.CF_API_KEY }}
+      GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}
+
+    # "steps" holds a list of all the steps needed to package and release our AddOn
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
 
-    - name: Create Zip
-      run: |
-        zip -r ${GITHUB_REF_NAME}.zip WarbandATM
+      # we first have to clone the AddOn project, this is a required step
+      - name: Clone project
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # gets entire git history, needed for automatic changelogs
 
-    - name: WarbandATM Release
-      run: |
-        curl -X POST \
-        -H "x-api-token: ${{ secrets.CF_API_KEY }}" \
-        -F "file=@${GITHUB_REF_NAME}.zip" \
-        -F "metadata={\"changelog\":\"Automated release from GitHub Actions\",\"changelogType\":\"markdown\",\"displayName\":\"${GITHUB_REF_NAME}\"}" \
-        https://wow.curseforge.com/api/projects/${{ secrets.CF_PROJECT_ID }}/upload-file
+      # once cloned, we just run the GitHub Action for the packager project
+      - name: Package and release
+        uses: BigWigsMods/packager@v2
