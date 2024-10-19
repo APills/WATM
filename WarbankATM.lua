@@ -33,7 +33,8 @@ function WATM:LoadProfile(profileName)
 end
 
 function WATM:InitProfiles()
-    local currentProfile = WATMCharacterSettings[characterKey].currentProfile
+    WATMCharacterSettings[characterKey] = WATMCharacterSettings[characterKey] or {}
+    local currentProfile = WATMCharacterSettings[characterKey].currentProfile or "Default"
     WATMProfiles[currentProfile] = WATMProfiles[currentProfile] or CopyTable(DEFAULT_PROFILE)
     WATMSettings = WATMProfiles[currentProfile]
 end
