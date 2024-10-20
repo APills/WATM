@@ -37,6 +37,9 @@ function WATM:InitProfiles()
     local currentProfile = WATMCharacterSettings[characterKey].currentProfile or "Default"
     WATMProfiles[currentProfile] = WATMProfiles[currentProfile] or CopyTable(DEFAULT_PROFILE)
     WATMSettings = WATMProfiles[currentProfile]
+    if not WATMCharacterSettings[characterKey].currentProfile then
+        WATMCharacterSettings[characterKey].currentProfile = currentProfile
+    end
 end
 
 function WATM:UpdateUIWithProfile()
