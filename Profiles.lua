@@ -1,3 +1,4 @@
+-- Didn't push correctly in 1.0.9
 PROFILES_DEBUG = "0000000000"
 
 function WATM:GetProfileNames()
