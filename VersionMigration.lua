@@ -6,7 +6,7 @@ WATM.CURRENT_DATA_FORMAT = "1.0.8"
 WATM.FORCE_MIGRATION = false
 
 function WATM:RunVersionMigration()
-    local savedVersion = WATMCharacterSettings.version or "0.0"
+    local savedVersion = WATMCharacterSettings.version or "0.0.0"
     
     if savedVersion ~= WATM.CURRENT_DATA_FORMAT and not WATM.FORCE_MIGRATION then
         self:DebugPrint("Migration skipped. Saved version is already up-to-date: " .. savedVersion)
@@ -14,7 +14,7 @@ function WATM:RunVersionMigration()
         return
     end
 
-    self:DebugPrint("Starting migration from version " .. savedVersion .. " to " .. WATM.CURRENT_DATA_FORMAT .. "...")
+    print("Starting migration from version " .. savedVersion .. " to " .. WATM.CURRENT_DATA_FORMAT .. "...")
 
     WATMProfiles = WATMProfiles or {}
     WATMCharacterSettings = WATMCharacterSettings or {}
@@ -28,7 +28,7 @@ function WATM:RunVersionMigration()
     }
 
     for profileName, profileData in pairs(WATMProfiles) do
-        self:DebugPrint("Migrating profile: " .. profileName)
+        print("Migrating profile: " .. profileName)
 
         profileData.withdrawGold = nil
         profileData.depositGold = nil
@@ -53,7 +53,7 @@ function WATM:RunVersionMigration()
 
     WATMCharacterSettings.version = WATM.CURRENT_DATA_FORMAT
     WATM.FORCE_MIGRATION = false
-    self:DebugPrint("Migration complete! Updated to version " .. WATM.CURRENT_DATA_FORMAT)
+    print("Migration complete! Updated to data format " .. WATM.CURRENT_DATA_FORMAT)
 
     VERSIONMIGRATION_DEBUG = VERSIONMIGRATION_DEBUG:sub(1, 2) .. "1" .. VERSIONMIGRATION_DEBUG:sub(4)  -- Mark migration success
 end

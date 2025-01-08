@@ -1,39 +1,30 @@
--- UI.lua
-
 function WATM:UpdateUIWithProfile()
-    -- Ensure the UIFrame is initialized
     if not self.UIFrame then
         print("Error: UIFrame not initialized.")
         return
     end
 
-    -- Ensure settings are initialized
     if not self.settings then
         print("Error: Settings for the current profile are not initialized.")
         return
     end
 
-    -- Check if depositCheckbox is initialized
     if not self.UIFrame.depositCheckbox then
         print("Error: depositCheckbox not initialized.")
         return
     end
 
-    -- Update the gold, silver, and copper inputs
     local gold = math.floor(self.settings.goldTarget / 10000)
     local silver = math.floor((self.settings.goldTarget % 10000) / 100)
     local copper = self.settings.goldTarget % 100
 
-    -- Update input fields
     self.UIFrame.goldInput:SetText(gold)
     self.UIFrame.silverInput:SetText(silver)
     self.UIFrame.copperInput:SetText(copper)
 
-    -- Update checkbox states
     self.UIFrame.depositCheckbox:SetChecked(self.settings.depositState)
     self.UIFrame.withdrawCheckbox:SetChecked(self.settings.withdrawState)
 
-    -- If debug mode is enabled, show reset button
     if self.settings.debugState then
         self.UIFrame.resetButton:Show()
     else
@@ -42,7 +33,6 @@ function WATM:UpdateUIWithProfile()
 end
 
 function WATM:CreateConfigFrame()
-    -- Main frame
     local frame = CreateFrame("Frame", "WATMConfigFrame", UIParent, "BasicFrameTemplateWithInset")
     frame:SetSize(400, 400)  -- Adjust height for compact layout
     frame:SetPoint("CENTER", UIParent, "CENTER")
@@ -58,7 +48,6 @@ function WATM:CreateConfigFrame()
     frame.title:SetPoint("CENTER", frame.TitleBg, "CENTER", 5, 0)
     frame.title:SetText("WarbankATM Config")
 
-    -- Create Reset Button
     local resetButton = CreateFrame("Button", nil, frame, "GameMenuButtonTemplate")
     resetButton:SetSize(120, 30)
     resetButton:SetPoint("BOTTOM", frame, "BOTTOM", 0, 10)
@@ -72,12 +61,10 @@ function WATM:CreateConfigFrame()
         WATM:UpdateUIWithProfile()
         print("Settings reset to default.")
     end)
-    resetButton:Hide()  -- Hide reset button initially
+    resetButton:Hide()
 
-    -- Save the button reference
     frame.resetButton = resetButton
 
-    -- Section: Profile Selection
     local function createSectionHeader(parent, text, offsetY)
         local header = parent:CreateFontString(nil, "OVERLAY", "GameFontHighlightMedium")
         header:SetPoint("TOPLEFT", 20, offsetY)
@@ -87,12 +74,10 @@ function WATM:CreateConfigFrame()
 
     createSectionHeader(frame, "Select Profile", -30)
 
-    -- Dropdown for profile selection
     local profileDropdown = CreateFrame("Frame", "WATMProfileDropdown", frame, "UIDropDownMenuTemplate")
     profileDropdown:SetPoint("TOPLEFT", 20, -60)
     UIDropDownMenu_SetWidth(profileDropdown, 180)
 
-    -- Initialize the dropdown
     UIDropDownMenu_Initialize(profileDropdown, function(self, level, menuList)
         local profiles = WATM:GetProfileNames()
         for _, profileName in ipairs(profiles) do
@@ -107,12 +92,10 @@ function WATM:CreateConfigFrame()
         end
     end)
 
-    -- Set the dropdown to the currently selected profile
     local characterKey = UnitName("player") .. "-" .. GetRealmName()
     local currentProfileName = WATMCharacterSettings[characterKey] and WATMCharacterSettings[characterKey].currentProfile or "Default"
     UIDropDownMenu_SetText(profileDropdown, currentProfileName)
 
-    -- Create New Profile Section
     createSectionHeader(frame, "Create New Profile", -110)
 
     local profileInput = CreateFrame("EditBox", nil, frame, "InputBoxTemplate")
@@ -121,7 +104,6 @@ function WATM:CreateConfigFrame()
     profileInput:SetAutoFocus(false)
     profileInput:SetMaxLetters(20)
 
-    -- Create profile button
     local createProfileButton = CreateFrame("Button", nil, frame, "GameMenuButtonTemplate")
     createProfileButton:SetSize(120, 30)
     createProfileButton:SetPoint("LEFT", profileInput, "RIGHT", 10, 0)
@@ -145,7 +127,6 @@ function WATM:CreateConfigFrame()
         WATM:UpdateUIWithProfile()
     end)
 
-    -- Delete Profile Section
     createSectionHeader(frame, "Delete Profile", -170)
 
     local deleteProfileDropdown = CreateFrame("Frame", "WATMDeleteProfileDropdown", frame, "UIDropDownMenuTemplate")
@@ -166,7 +147,6 @@ function WATM:CreateConfigFrame()
         end
     end)
 
-    -- Delete profile button
     local deleteProfileButton = CreateFrame("Button", nil, frame, "GameMenuButtonTemplate")
     deleteProfileButton:SetSize(120, 30)
     deleteProfileButton:SetPoint("LEFT", deleteProfileDropdown, "RIGHT", 10, 0)
@@ -188,7 +168,6 @@ function WATM:CreateConfigFrame()
         UIDropDownMenu_SetText(deleteProfileDropdown, "")
     end)
 
-    -- Gold Target Section
     createSectionHeader(frame, "Gold Target", -250)
 
     local goldInput = CreateFrame("EditBox", nil, frame, "InputBoxTemplate")
@@ -215,7 +194,6 @@ function WATM:CreateConfigFrame()
     copperInput:SetNumeric(true)
     copperInput:SetText(WATM.settings.goldTarget % 100 or 0)
 
-    -- Update target gold when inputs change
     local function updateGoldTarget()
         local gold = tonumber(goldInput:GetText()) or 0
         local silver = tonumber(silverInput:GetText()) or 0
@@ -227,12 +205,10 @@ function WATM:CreateConfigFrame()
     silverInput:SetScript("OnEditFocusLost", updateGoldTarget)
     copperInput:SetScript("OnEditFocusLost", updateGoldTarget)
 
-    -- Save the references to the input fields
     frame.goldInput = goldInput
     frame.silverInput = silverInput
     frame.copperInput = copperInput
 
-    -- Checkboxes Section
     local depositCheckbox = CreateFrame("CheckButton", nil, frame, "UICheckButtonTemplate")
     depositCheckbox:SetPoint("TOPLEFT", 20, -310)
     depositCheckbox.text:SetText("Auto Deposit Gold")
@@ -249,7 +225,6 @@ function WATM:CreateConfigFrame()
         WATM.settings.withdrawState = self:GetChecked()
     end)
 
-    -- Reset Button Section (only shown if debug mode is enabled)
     local resetButton = CreateFrame("Button", nil, frame, "GameMenuButtonTemplate")
     resetButton:SetSize(120, 30)
     resetButton:SetPoint("BOTTOM", frame, "BOTTOM", 0, 10)
@@ -263,19 +238,14 @@ function WATM:CreateConfigFrame()
         WATM:UpdateUIWithProfile()
         print("Settings reset to default.")
     end)
-    -- Initially hide reset button
     resetButton:Hide()
 
-    -- Save the button reference
     frame.resetButton = resetButton
 
-    -- Save UI elements to the frame for reference
     frame.depositCheckbox = depositCheckbox
     frame.withdrawCheckbox = withdrawCheckbox
 
-    -- Save the frame reference
     WATM.UIFrame = frame
 
-    -- Call CheckDebugMode to ensure the resetButton is shown or hidden based on debug mode
     WATM:CheckDebugMode()
 end
