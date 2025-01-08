@@ -63,7 +63,7 @@ function WATM:SwitchProfile(profileName)
         UIDropDownMenu_SetText(WATM.UIFrame.profileDropdown, profileName)
     end
 
-    self:DebugPrint("Switched to profile: " .. profileName)
+    print("Switched to profile: " .. profileName)
     PROFILES_DEBUG = PROFILES_DEBUG:sub(1, 3) .. "1" .. PROFILES_DEBUG:sub(5)  -- Mark SwitchProfile success
 end
 
