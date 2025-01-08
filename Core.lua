@@ -1,6 +1,6 @@
 CORE_DEBUG = "0000000000"
-
-local WATM = CreateFrame("Frame", "WarbankATM")
+-- Didn't push correctly
+local WATM = CreateFrame("Frame", "WarbankATM") 
 local addonName = "WarbankATM"
 local characterKey = UnitName("player") .. "-" .. GetRealmName()
 
@@ -72,15 +72,12 @@ function WATM:OnEvent(event, arg1)
         self:SaveSettings()
     elseif event == "BANKFRAME_OPENED" then
         self:NormalizeGold()
-    elseif event == "PLAYER_MONEY" then
-        self:NormalizeGold()
     end
 end
 
 WATM:RegisterEvent("ADDON_LOADED")
 WATM:RegisterEvent("PLAYER_LOGOUT")
 WATM:RegisterEvent("BANKFRAME_OPENED")
-WATM:RegisterEvent("PLAYER_MONEY")
 WATM:SetScript("OnEvent", WATM.OnEvent)
 
 function WATM:NormalizeGold()
