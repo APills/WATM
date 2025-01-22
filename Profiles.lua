@@ -1,4 +1,3 @@
--- Didn't push correctly in 1.0.9
 PROFILES_DEBUG = "0000000000"
 
 function WATM:GetProfileNames()
@@ -12,7 +11,7 @@ function WATM:GetProfileNames()
         table.insert(profileNames, profileName)
     end
     table.sort(profileNames)
-    PROFILES_DEBUG = PROFILES_DEBUG:sub(1, 1) .. "1" .. PROFILES_DEBUG:sub(3)  -- Mark GetProfileNames success
+    PROFILES_DEBUG = PROFILES_DEBUG:sub(1, 1) .. "1" .. PROFILES_DEBUG:sub(3)
     return profileNames
 end
 
@@ -36,7 +35,7 @@ function WATM:CreateProfile(profileName)
     print("Profile '" .. profileName .. "' created successfully.")
 
     self:SwitchProfile(profileName)
-    PROFILES_DEBUG = PROFILES_DEBUG:sub(1, 2) .. "1" .. PROFILES_DEBUG:sub(4)  -- Mark CreateProfile success
+    PROFILES_DEBUG = PROFILES_DEBUG:sub(1, 2) .. "1" .. PROFILES_DEBUG:sub(4)
 end
 
 function WATM:SwitchProfile(profileName)
@@ -65,7 +64,7 @@ function WATM:SwitchProfile(profileName)
     end
 
     print("Switched to profile: " .. profileName)
-    PROFILES_DEBUG = PROFILES_DEBUG:sub(1, 3) .. "1" .. PROFILES_DEBUG:sub(5)  -- Mark SwitchProfile success
+    PROFILES_DEBUG = PROFILES_DEBUG:sub(1, 3) .. "1" .. PROFILES_DEBUG:sub(5)
 end
 
 function WATM:DeleteProfile(profileName)
@@ -94,5 +93,5 @@ function WATM:DeleteProfile(profileName)
         self:SwitchProfile("Default")
         print("Switched to 'Default' profile after deletion.")
     end
-    PROFILES_DEBUG = PROFILES_DEBUG:sub(1, 4) .. "1" .. PROFILES_DEBUG:sub(6)  -- Mark DeleteProfile success
+    PROFILES_DEBUG = PROFILES_DEBUG:sub(1, 4) .. "1" .. PROFILES_DEBUG:sub(6)
 end

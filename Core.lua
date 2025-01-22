@@ -1,5 +1,4 @@
 CORE_DEBUG = "0000000000"
--- Didn't push correctly
 local WATM = CreateFrame("Frame", "WarbankATM") 
 local addonName = "WarbankATM"
 local characterKey = UnitName("player") .. "-" .. GetRealmName()
@@ -27,7 +26,7 @@ function WATM:DebugPrint(message)
 end
 
 function WATM:InitAddon()
-    CORE_DEBUG = CORE_DEBUG:sub(1, 1) .. "1" .. CORE_DEBUG:sub(3)  -- Set first part as success
+    CORE_DEBUG = CORE_DEBUG:sub(1, 1) .. "1" .. CORE_DEBUG:sub(3)
     self:RunVersionMigration()
 
     local characterKey = UnitName("player") .. "-" .. GetRealmName()
@@ -39,20 +38,20 @@ function WATM:InitAddon()
 
     self.settings = WATMProfiles[currentProfileName]
 
-    CORE_DEBUG = CORE_DEBUG:sub(1, 2) .. "1" .. CORE_DEBUG:sub(4)  -- Mark profile load as success
+    CORE_DEBUG = CORE_DEBUG:sub(1, 2) .. "1" .. CORE_DEBUG:sub(4)
 
     self:CheckDebugMode()
 
-    CORE_DEBUG = CORE_DEBUG:sub(1, 3) .. "1" .. CORE_DEBUG:sub(5)  -- Mark debug mode check as success
+    CORE_DEBUG = CORE_DEBUG:sub(1, 3) .. "1" .. CORE_DEBUG:sub(5)
 end
 
 function WATM:CheckDebugMode()
     local currentProfileName = WATMCharacterSettings[characterKey].currentProfile
     local currentProfile = WATMProfiles[currentProfileName]
     if currentProfile.debugState then
-        CORE_DEBUG = CORE_DEBUG:sub(1, 4) .. "1" .. CORE_DEBUG:sub(6)  -- Debug mode is enabled
+        CORE_DEBUG = CORE_DEBUG:sub(1, 4) .. "1" .. CORE_DEBUG:sub(6)
     else
-        CORE_DEBUG = CORE_DEBUG:sub(1, 4) .. "0" .. CORE_DEBUG:sub(6)  -- Debug mode is disabled
+        CORE_DEBUG = CORE_DEBUG:sub(1, 4) .. "0" .. CORE_DEBUG:sub(6)
     end
 end
 
@@ -61,7 +60,7 @@ function WATM:SaveSettings()
     if currentProfile and WATMProfiles[currentProfile] then
         WATMProfiles[currentProfile] = CopyTable(self.settings)
         self:DebugPrint("Settings saved for profile: " .. currentProfile)
-        CORE_DEBUG = CORE_DEBUG:sub(1, 5) .. "1" .. CORE_DEBUG:sub(7)  -- Mark save settings as success
+        CORE_DEBUG = CORE_DEBUG:sub(1, 5) .. "1" .. CORE_DEBUG:sub(7)
     end
 end
 
@@ -87,17 +86,15 @@ function WATM:NormalizeGold()
     if self.settings.depositState and bagGold > targetGold then
         local excessGold = bagGold - targetGold
         C_Bank.DepositMoney(2, excessGold)
-        -- Corrected print statement to reference excessGold
         print("|cff33ff99[WATM]|r Depositing " .. GetMoneyString(excessGold, true) .. " into the Warband Bank.")
-        CORE_DEBUG = CORE_DEBUG:sub(1, 6) .. "1" .. CORE_DEBUG:sub(8)  -- Deposit logic success
+        CORE_DEBUG = CORE_DEBUG:sub(1, 6) .. "1" .. CORE_DEBUG:sub(8)
     end
 
     if self.settings.withdrawState and bagGold < targetGold then
         local shortageGold = targetGold - bagGold
         C_Bank.WithdrawMoney(2, shortageGold)
-        -- Corrected print statement to reference shortageGold
         print("|cff33ff99[WATM]|r Withdrawing " .. GetMoneyString(shortageGold, true) .. " from the Warband Bank.")
-        CORE_DEBUG = CORE_DEBUG:sub(1, 7) .. "1" .. CORE_DEBUG:sub(9)  -- Withdrawal logic success
+        CORE_DEBUG = CORE_DEBUG:sub(1, 7) .. "1" .. CORE_DEBUG:sub(9)
     end
 end
 

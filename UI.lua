@@ -34,7 +34,7 @@ end
 
 function WATM:CreateConfigFrame()
     local frame = CreateFrame("Frame", "WATMConfigFrame", UIParent, "BasicFrameTemplateWithInset")
-    frame:SetSize(400, 400)  -- Adjust height for compact layout
+    frame:SetSize(400, 400)
     frame:SetPoint("CENTER", UIParent, "CENTER")
     frame:SetMovable(true)
     frame:EnableMouse(true)
