@@ -1,4 +1,4 @@
-## Interface: 110007
+## Interface: 120000, 120001
 ## Title: Warbank ATM
 ## Notes: Warband Bank Money Manager
 ## Author: APills, Brylic
